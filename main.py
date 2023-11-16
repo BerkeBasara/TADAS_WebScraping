@@ -110,7 +110,9 @@ while True:
                                                 ara_button = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[1]/div/div/div[1]/div[2]/div[2]/button[1]")
                                                 ara_button.click()
                                                 time.sleep(15)
-
+                                                deprem_id = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/div/div/table/thead/tr/th[1]/a")
+                                                deprem_id.click()
+                                                time.sleep(3)
                                                 if next_page is False:
 
                                                         while common_page < (page-1):
@@ -930,4 +932,3 @@ while True:
 
                                 gui.mainloop()
                                 terminate_gui()
-
