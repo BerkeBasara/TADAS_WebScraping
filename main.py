@@ -17,20 +17,29 @@ import sys
 import queue
 import threading
 from selenium.webdriver.common.action_chains import ActionChains
+import pyautogui
 textWave=""
 simulationWaveRun = False
 simulationEventRun = False
+import cv2
+import pyautogui
+from selenium.webdriver.chrome.service import Service as ChromeService, Service
+from selenium.webdriver.chrome.options import Options
 init(autoreset=True)
 
 
 while True:
         if ErrorWave == False:
+
                 def simulationWave():
                         while True:
                                 try:
                                         textWave = "Wave Simulation starts..."
-                                        driver_path = "C:\webdrivers\chromedriver.exe"
-                                        browser = webdriver.Chrome(driver_path)
+                                        driver_path = Service("C:\webdrivers\chromedriver.exe")
+                                        chromeOptions = Options()
+                                        chromeOptions.headless = False
+
+                                        browser = webdriver.Chrome(service=driver_path, options=chromeOptions)
 
                                         browser.get("https://tadas.afad.gov.tr/map")
 
@@ -55,7 +64,7 @@ while True:
                                                 tr_number = tr_number + 1
                                                 common_page = 0
                                                 browser.get("https://tadas.afad.gov.tr/list-waveform")
-                                                time.sleep(15)
+                                                time.sleep(10)
 
                                                 range_input = browser.find_element(By.XPATH, "./html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[1]/div/div/div[1]/div[2]/div[1]/div/div/div[1]/div/div[4]/div/div/div[1]/kendo-datepicker/span/kendo-dateinput/span/input")
                                                 value = range_input.get_attribute('aria-valuenow')
@@ -97,10 +106,10 @@ while True:
                                                 range_input.send_keys(Keys.ARROW_LEFT)
                                                 range_input.send_keys(Keys.ARROW_LEFT)
                                                 range_input.send_keys(DAY2)
-
+                                                time.sleep(5)
                                                 ara_button = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[1]/div/div/div[1]/div[2]/div[2]/button[1]")
                                                 ara_button.click()
-                                                time.sleep(120)
+                                                time.sleep(15)
 
                                                 if next_page is False:
 
@@ -109,414 +118,261 @@ while True:
                                                                 #time.sleep(10)
                                                                 next_page = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/kendo-pager/kendo-pager-next-buttons/a[1]")
                                                                 next_page.click()
-                                                                #time.sleep(5)
+                                                                time.sleep(2)
                                                                 common_page = common_page + 1
 
                                                 else:
                                                         while common_page < page:
                                                                 next_page = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/kendo-pager/kendo-pager-next-buttons/a[1]")
                                                                 next_page.click()
-                                                                #time.sleep(3)
+                                                                time.sleep(3)
                                                                 common_page = common_page + 1
                                                                 next_page = False
                                                         page = page + 1
 
-                                                time.sleep(30)
+                                                time.sleep(15)
 
                                                 if tr_number == 1:
-
-                                                        data_waveCode = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[1]/td[6]")
-                                                        time.sleep(5)
-                                                        code_data = data_waveCode.get_attribute("textContent")
-                                                        time.sleep(5)
                                                         ham_veri = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[1]/td[12]/button")
-                                                        time.sleep(10)
                                                         ham_veri.click()
-                                                        textWave = "Ham veri yükleniyor"
-                                                        print("Ham veri yükleniyor")
-                                                        time.sleep(20)
-
+                                                        time.sleep(40)
 
                                                         veri_süzgeçleme = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process/div[7]/div/button[2]")
-                                                        time.sleep(15)
                                                         veri_süzgeçleme.click()
                                                         print("Ham veri süzgeçleniyor")
                                                         textWave = "Ham veri süzgeçleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veriyi_işle = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process2/form/div/div[2]/div[5]/div/button[3]")
-                                                        time.sleep(10)
                                                         veriyi_işle.click()
                                                         print("Ham veriyi işleniyor")
                                                         textWave="Ham veriyi işleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         ham_veriyi_indir = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-chart/div/div/div[5]/div/button[1]")
-                                                        time.sleep(10)
                                                         ham_veriyi_indir.click()
                                                         print("Ham veriyi indirme işlemi gerçekleştiriliyor")
                                                         textWave = "Ham veriyi indirme işlemi gerçekleştiriliyor"
                                                         time.sleep(20)
                                                         next_page = False
-                                                        data_waveNumber = data_waveNumber + 1
-                                                        print("Downloaded Wave Code: ", code_data, "Downloaded Number of Wave Data: ", data_waveNumber)
-                                                        string_codeData = str(code_data)
-                                                        string_dataWaveNumber = str(data_waveNumber)
-                                                        print("Ham veri indirildi")
-                                                        textWave = "Downloaded Wave Code: ", string_codeData, "Downloaded Number of Wave Data: ", string_dataWaveNumber
-                                                        time.sleep(5)
 
                                                 elif tr_number == 2:
-                                                        data_waveCode = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[2]/td[6]")
-                                                        time.sleep(5)
-                                                        code_data = data_waveCode.get_attribute("textContent")
-                                                        time.sleep(5)
                                                         ham_veri = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[2]/td[12]/button")
-                                                        time.sleep(7)
                                                         ham_veri.click()
-                                                        print("Ham veri yükleniyor")
-                                                        textWave = "Ham veri yükleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veri_süzgeçleme = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process/div[7]/div/button[2]")
-                                                        time.sleep(15)
                                                         veri_süzgeçleme.click()
                                                         print("Ham veri süzgeçleniyor")
                                                         textWave = "Ham veri süzgeçleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veriyi_işle = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process2/form/div/div[2]/div[5]/div/button[3]")
-                                                        time.sleep(10)
                                                         veriyi_işle.click()
                                                         print("Ham veriyi işleniyor")
                                                         textWave = "Ham veriyi işleniyor"
-                                                        time.sleep(15)
+                                                        time.sleep(40)
 
                                                         ham_veriyi_indir = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-chart/div/div/div[5]/div/button[1]")
-                                                        time.sleep(10)
                                                         ham_veriyi_indir.click()
                                                         print("Ham veriyi indirme işlemi gerçekleştiriliyor")
                                                         textWave = "Ham veriyi indirme işlemi gerçekleştiriliyor"
                                                         time.sleep(20)
                                                         next_page = False
-                                                        data_waveNumber = data_waveNumber + 1
-                                                        print("Downloaded Wave Code: ", code_data, "Downloaded Number of Wave Data: ", data_waveNumber)
-                                                        print("Ham veri indirildi")
-                                                        textWave = "Downloaded Wave Code: ", string_codeData, "Downloaded Number of Wave Data: ", string_dataWaveNumber
-                                                        time.sleep(5)
 
                                                 elif tr_number == 3:
-                                                        data_waveCode = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[3]/td[6]")
-                                                        time.sleep(5)
-                                                        code_data = data_waveCode.get_attribute("textContent")
-                                                        time.sleep(5)
                                                         ham_veri = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[3]/td[12]/button")
-                                                        time.sleep(7)
                                                         ham_veri.click()
-                                                        print("Ham veri yükleniyor")
-                                                        textWave = "Ham veri yükleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veri_süzgeçleme = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process/div[7]/div/button[2]")
-                                                        time.sleep(15)
                                                         veri_süzgeçleme.click()
                                                         print("Ham veri süzgeçleniyor")
                                                         textWave = "Ham veri süzgeçleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veriyi_işle = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process2/form/div/div[2]/div[5]/div/button[3]")
-                                                        time.sleep(10)
                                                         veriyi_işle.click()
                                                         print("Ham veriyi işleniyor")
                                                         textWave = "Ham veriyi işleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         ham_veriyi_indir = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-chart/div/div/div[5]/div/button[1]")
-                                                        time.sleep(10)
                                                         ham_veriyi_indir.click()
                                                         print("Ham veriyi indirme işlemi gerçekleştiriliyor")
                                                         textWave = "Ham veriyi indirme işlemi gerçekleştiriliyor"
                                                         time.sleep(20)
                                                         next_page = False
-                                                        data_waveNumber = data_waveNumber + 1
-                                                        print("Downloaded Wave Code: ", code_data, "Downloaded Number of Wave Data: ", data_waveNumber)
-                                                        print("Ham veri indirildi")
-                                                        textWave = "Downloaded Wave Code: ", string_codeData, "Downloaded Number of Wave Data: ", string_dataWaveNumber
-                                                        time.sleep(5)
 
                                                 elif tr_number == 4:
-                                                        data_waveCode = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[4]/td[6]")
-                                                        time.sleep(5)
-                                                        code_data = data_waveCode.get_attribute("textContent")
-                                                        time.sleep(5)
                                                         ham_veri = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[4]/td[12]/button")
-                                                        time.sleep(7)
                                                         ham_veri.click()
-                                                        print("Ham veri yükleniyor")
-                                                        textWave = "Ham veri yükleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veri_süzgeçleme = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process/div[7]/div/button[2]")
-                                                        time.sleep(15)
                                                         veri_süzgeçleme.click()
                                                         print("Ham veri süzgeçleniyor")
                                                         textWave = "Ham veri süzgeçleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veriyi_işle = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process2/form/div/div[2]/div[5]/div/button[3]")
-                                                        time.sleep(10)
                                                         veriyi_işle.click()
                                                         print("Ham veriyi işleniyor")
                                                         textWave = "Ham veriyi işleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         ham_veriyi_indir = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-chart/div/div/div[5]/div/button[1]")
-                                                        time.sleep(10)
                                                         ham_veriyi_indir.click()
                                                         print("Ham veriyi indirme işlemi gerçekleştiriliyor")
                                                         textWave = "Ham veriyi indirme işlemi gerçekleştiriliyor"
                                                         time.sleep(20)
                                                         next_page = False
-                                                        data_waveNumber = data_waveNumber + 1
-                                                        print("Downloaded Wave Code: ", code_data, "Downloaded Number of Wave Data: ", data_waveNumber)
-                                                        print("Ham veri indirildi")
-                                                        textWave = "Downloaded Wave Code: ", string_codeData, "Downloaded Number of Wave Data: ", string_dataWaveNumber
-                                                        time.sleep(5)
 
                                                 elif tr_number == 5:
-                                                        data_waveCode = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[5]/td[6]")
-                                                        time.sleep(5)
-                                                        code_data = data_waveCode.get_attribute("textContent")
-                                                        time.sleep(5)
                                                         ham_veri = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[5]/td[12]/button")
-                                                        time.sleep(7)
                                                         ham_veri.click()
-                                                        print("Ham veri yükleniyor")
-                                                        textWave = "Ham veri yükleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veri_süzgeçleme = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process/div[7]/div/button[2]")
-                                                        time.sleep(15)
                                                         veri_süzgeçleme.click()
                                                         print("Ham veri süzgeçleniyor")
                                                         textWave = "Ham veri süzgeçleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veriyi_işle = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process2/form/div/div[2]/div[5]/div/button[3]")
-                                                        time.sleep(10)
                                                         veriyi_işle.click()
                                                         print("Ham veriyi işleniyor")
                                                         textWave = "Ham veriyi işleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         ham_veriyi_indir = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-chart/div/div/div[5]/div/button[1]")
-                                                        time.sleep(10)
                                                         ham_veriyi_indir.click()
                                                         print("Ham veriyi indirme işlemi gerçekleştiriliyor")
                                                         textWave = "Ham veriyi indirme işlemi gerçekleştiriliyor"
                                                         time.sleep(20)
                                                         next_page = False
-                                                        data_waveNumber = data_waveNumber + 1
-                                                        print("Downloaded Wave Code: ", code_data, "Downloaded Number of Wave Data: ", data_waveNumber)
-                                                        print("Ham veri indirildi")
-                                                        textWave = "Downloaded Wave Code: ", string_codeData, "Downloaded Number of Wave Data: ", string_dataWaveNumber
-                                                        time.sleep(5)
 
                                                 elif tr_number == 6:
-                                                        data_waveCode = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[6]/td[6]")
-                                                        time.sleep(5)
-                                                        code_data = data_waveCode.get_attribute("textContent")
-                                                        time.sleep(5)
                                                         ham_veri = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[6]/td[12]/button")
-                                                        time.sleep(7)
                                                         ham_veri.click()
-                                                        print("Ham veri yükleniyor")
-                                                        textWave = "Ham veri yükleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veri_süzgeçleme = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process/div[7]/div/button[2]")
-                                                        time.sleep(15)
                                                         veri_süzgeçleme.click()
                                                         print("Ham veri süzgeçleniyor")
                                                         textWave = "Ham veri süzgeçleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veriyi_işle = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process2/form/div/div[2]/div[5]/div/button[3]")
-                                                        time.sleep(10)
                                                         veriyi_işle.click()
                                                         print("Ham veriyi işleniyor")
                                                         textWave = "Ham veriyi işleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         ham_veriyi_indir = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-chart/div/div/div[5]/div/button[1]")
-                                                        time.sleep(10)
                                                         ham_veriyi_indir.click()
                                                         print("Ham veriyi indirme işlemi gerçekleştiriliyor")
                                                         textWave = "Ham veriyi indirme işlemi gerçekleştiriliyor"
                                                         time.sleep(20)
                                                         next_page = False
-                                                        data_waveNumber = data_waveNumber + 1
-                                                        print("Downloaded Wave Code: ", code_data, "Downloaded Number of Wave Data: ", data_waveNumber)
-                                                        print("Ham veri indirildi")
-                                                        textWave = "Downloaded Wave Code: ", string_codeData, "Downloaded Number of Wave Data: ", string_dataWaveNumber
-                                                        time.sleep(5)
 
                                                 elif tr_number == 7:
-                                                        data_waveCode = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[7]/td[6]")
-                                                        time.sleep(5)
-                                                        code_data = data_waveCode.get_attribute("textContent")
-                                                        time.sleep(5)
                                                         ham_veri = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[7]/td[12]/button")
-                                                        time.sleep(7)
                                                         ham_veri.click()
-                                                        print("Ham veri yükleniyor")
-                                                        textWave = "Ham veri yükleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veri_süzgeçleme = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process/div[7]/div/button[2]")
-                                                        time.sleep(15)
                                                         veri_süzgeçleme.click()
                                                         print("Ham veri süzgeçleniyor")
                                                         textWave = "Ham veri süzgeçleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veriyi_işle = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process2/form/div/div[2]/div[5]/div/button[3]")
-                                                        time.sleep(10)
                                                         veriyi_işle.click()
                                                         print("Ham veriyi işleniyor")
                                                         textWave = "Ham veriyi işleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         ham_veriyi_indir = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-chart/div/div/div[5]/div/button[1]")
-                                                        time.sleep(10)
                                                         ham_veriyi_indir.click()
                                                         print("Ham veriyi indirme işlemi gerçekleştiriliyor")
                                                         textWave = "Ham veriyi indirme işlemi gerçekleştiriliyor"
                                                         time.sleep(20)
                                                         next_page = False
-                                                        data_waveNumber = data_waveNumber + 1
-                                                        print("Downloaded Wave Code: ", code_data, "Downloaded Number of Wave Data: ", data_waveNumber)
-                                                        print("Ham veri indirildi")
-                                                        textWave = "Downloaded Wave Code: ", string_codeData, "Downloaded Number of Wave Data: ", string_dataWaveNumber
-                                                        time.sleep(5)
 
                                                 elif tr_number == 8:
-                                                        data_waveCode = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[8]/td[6]")
-                                                        time.sleep(5)
-                                                        code_data = data_waveCode.get_attribute("textContent")
-                                                        time.sleep(5)
                                                         ham_veri = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[8]/td[12]/button")
-                                                        time.sleep(7)
-                                                        print("Ham veri yükleniyor")
-                                                        textWave = "Ham veri yükleniyor"
                                                         ham_veri.click()
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veri_süzgeçleme = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process/div[7]/div/button[2]")
-                                                        time.sleep(15)
                                                         veri_süzgeçleme.click()
                                                         print("Ham veri süzgeçleniyor")
                                                         textWave = "Ham veri süzgeçleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veriyi_işle = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process2/form/div/div[2]/div[5]/div/button[3]")
-                                                        time.sleep(10)
                                                         veriyi_işle.click()
                                                         print("Ham veriyi işleniyor")
                                                         textWave = "Ham veriyi işleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         ham_veriyi_indir = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-chart/div/div/div[5]/div/button[1]")
-                                                        time.sleep(10)
                                                         ham_veriyi_indir.click()
                                                         print("Ham veriyi indirme işlemi gerçekleştiriliyor")
                                                         textWave = "Ham veriyi indirme işlemi gerçekleştiriliyor"
                                                         time.sleep(20)
                                                         next_page = False
-                                                        data_waveNumber = data_waveNumber + 1
-                                                        print("Downloaded Wave Code: ", code_data, "Downloaded Number of Wave Data: ", data_waveNumber)
-                                                        print("Ham veri indirildi")
-                                                        textWave = "Downloaded Wave Code: ", string_codeData, "Downloaded Number of Wave Data: ", string_dataWaveNumber
-                                                        time.sleep(5)
 
                                                 elif tr_number == 9:
-                                                        data_waveCode = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[9]/td[6]")
-                                                        time.sleep(5)
-                                                        code_data = data_waveCode.get_attribute("textContent")
-                                                        time.sleep(5)
                                                         ham_veri = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[9]/td[12]/button")
-                                                        time.sleep(7)
                                                         ham_veri.click()
-                                                        print("Ham veri yükleniyor")
-                                                        textWave = "Ham veri yükleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veri_süzgeçleme = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process/div[7]/div/button[2]")
-                                                        time.sleep(15)
                                                         veri_süzgeçleme.click()
                                                         print("Ham veri süzgeçleniyor")
                                                         textWave = "Ham veri süzgeçleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veriyi_işle = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process2/form/div/div[2]/div[5]/div/button[3]")
-                                                        time.sleep(10)
                                                         veriyi_işle.click()
                                                         print("Ham veriyi işleniyor")
                                                         textWave = "Ham veriyi işleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         ham_veriyi_indir = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-chart/div/div/div[5]/div/button[1]")
-                                                        time.sleep(10)
                                                         ham_veriyi_indir.click()
                                                         print("Ham veriyi indirme işlemi gerçekleştiriliyor")
                                                         textWave = "Ham veriyi indirme işlemi gerçekleştiriliyor"
                                                         time.sleep(20)
                                                         next_page = False
-                                                        data_waveNumber = data_waveNumber + 1
-                                                        print("Downloaded Wave Code: ", code_data, "Downloaded Number of Wave Data: ", data_waveNumber)
-                                                        print("Ham veri indirildi")
-                                                        textWave = "Downloaded Wave Code: ", string_codeData, "Downloaded Number of Wave Data: ", string_dataWaveNumber
-                                                        time.sleep(5)
 
                                                 else:
-                                                        data_waveCode = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[10]/td[6]")
-                                                        time.sleep(5)
-                                                        code_data = data_waveCode.get_attribute("textContent")
-                                                        time.sleep(5)
                                                         ham_veri = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-list-waveform/div/div/div/div/div/div[2]/div/div/kendo-grid/div/kendo-grid-list/div/div[1]/table/tbody/tr[10]/td[12]/button")
-                                                        time.sleep(7)
                                                         ham_veri.click()
-                                                        print("Ham veri yükleniyor")
-                                                        textWave = "Ham veri yükleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veri_süzgeçleme = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process/div[7]/div/button[2]")
-                                                        time.sleep(15)
                                                         veri_süzgeçleme.click()
                                                         print("Ham veri süzgeçleniyor")
                                                         textWave = "Ham veri süzgeçleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         veriyi_işle = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-process2/form/div/div[2]/div[5]/div/button[3]")
-                                                        time.sleep(10)
                                                         veriyi_işle.click()
                                                         print("Ham veriyi işleniyor")
                                                         textWave = "Ham veriyi işleniyor"
-                                                        time.sleep(20)
+                                                        time.sleep(40)
 
                                                         ham_veriyi_indir = browser.find_element(By.XPATH, "/html/body/app-root/div[2]/app-chart/div/div/div[5]/div/button[1]")
-                                                        time.sleep(10)
                                                         ham_veriyi_indir.click()
                                                         print("Ham veriyi indirme işlemi gerçekleştiriliyor")
                                                         textWave = "Ham veriyi indirme işlemi gerçekleştiriliyor"
-                                                        time.sleep(25)
+                                                        time.sleep(20)
                                                         tr_number = 0
                                                         next_page = True
-                                                        data_waveNumber = data_waveNumber + 1
-                                                        print("Downloaded Wave Code: ", code_data, "Downloaded Number of Wave Data: ", data_waveNumber)
                                                         print("Ham veri indirildi")
-                                                        textWave = "Downloaded Wave Code: ", string_codeData, "Downloaded Number of Wave Data: ", string_dataWaveNumber
-                                                        time.sleep(5)
 
                                                 def print_error_message(message):
                                                         print("\033[91mError: {}\033[0m".format(message))
@@ -526,7 +382,10 @@ while True:
                                         print(f"An error occurred in Waveform simulation: {str(e)}")
                                         print(Fore.RED + "Hata Mesajı:", str(e))
                                         textWave = str(e)
-                                        browser.quit()
+
+                                finally:
+                                        if browser:
+                                                browser.quit()
         if ErrorEvent == False:
                 def simulationEvent():
                         while True:
@@ -1071,26 +930,4 @@ while True:
 
                                 gui.mainloop()
                                 terminate_gui()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
